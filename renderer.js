@@ -36,7 +36,7 @@ const gamesettingsBtn = document.getElementById('gamesettings');
 const versionDiv = document.getElementById('version');
 versionDiv.innerHTML = package.version;
 
-const configFile = require('os').homedir() + '/swg-infinity.json';
+const configFile = require('os').homedir() + '/Infinity-Launcher.json';
 var config = {folder: 'C:\\SWGInfinity'};
 if (fs.existsSync(configFile))
     config = JSON.parse(fs.readFileSync(configFile));
@@ -73,14 +73,35 @@ closeBtn.addEventListener('click', event => remote.getCurrentWindow().close());
 
 playBtn.addEventListener('click', event => {
     if (playBtn.disabled) return;
-    fs.writeFileSync(path.join(config.folder, "swgemu_login.cfg"), `[ClientGame]\r\nloginServerAddress0=${server.address}\r\nloginServerPort0=${server.port}`);
+    var fd = fs.openSync(path.join(config.folder, "SWGEmu.exe"), "r");
+    var buf = new Buffer(7);
+    var bytes = fs.readSync(fd, buf, 0, 7, 0x1153);
+    fs.closeSync(fd);
+    fd = null;
+    if (bytes == 7 && buf.readUInt8(0) == 0xc7 && buf.readUInt8(1) == 0x45 && buf.readUInt8(2) == 0x94 && buf.readFloatLE(3) != config.fps) {
+        var file = require('random-access-file')(path.join(config.folder, "SWGEmu.exe"));
+        buf = new Buffer(4);
+        buf.writeFloatLE(config.fps);
+        file.write(0x1156, buf, err => {
+            if (err) alert("Could not modify FPS. Close all instances of the game to update FPS.\n" + ex.toString());
+            file.close(play);
+        })
+    } else {
+        play();
+    }
+});
+
+function play() {
+    fs.writeFileSync(path.join(config.folder, "swgemu_login.cfg"), `[ClientGame]\r\nloginServerAddress0=${server.address}\r\nloginServerPort0=${server.port}\r\nfreeChaseCameraMaximumZoom=${config.zoom}`);
     var args = ["--",
         "-s", "ClientGame", "loginServerAddress0=" + server.address, "loginServerPort0=" + server.port,
         "-s", "Station", "gameFeatures=34929",
         "-s", "SwgClient", "allowMultipleInstances=true"];
-    const child = process.spawn("SWGEmu.exe", args, {cwd: config.folder, detached: true, stdio: 'ignore'});
+    var env = Object.create(require('process').env);
+    env.SWGCLIENT_MEMORY_SIZE_MB = config.ram;
+    const child = process.spawn("SWGEmu.exe", args, {cwd: config.folder, env: env, detached: true, stdio: 'ignore'});
     child.unref();
-});
+}
 
 gamesettingsBtn.addEventListener('click', event => {
     const child = process.spawn("cmd", ["/c", path.join(config.folder, "SWGEmu_Setup.exe")], {cwd: config.folder, detached: true, stdio: 'ignore'});
@@ -105,7 +126,7 @@ home.addEventListener('click', event => {
     settings.className = "button";
 });
 
-websiteBtn.addEventListener('click', event => shell.openExternal("http://www.swginfinity.com/"));
+websiteBtn.addEventListener('click', event => shell.openExternal("http://www.swginfinity.com.com/"));
 discordBtn.addEventListener('click', event => shell.openExternal("https://discordapp.com/channels/328626951315259395/328626951315259395"));
 
 browseBtn.addEventListener('click', function (event) {
@@ -123,6 +144,19 @@ ipc.on('selected-directory', function (event, path) {
     saveConfig();
 });
 
+fpsSel.addEventListener('change', event => {
+    config.fps = event.target.value;
+    saveConfig();
+});
+ramSel.addEventListener('change', event => {
+    config.ram = event.target.value;
+    saveConfig();
+});
+zoomSel.addEventListener('change', event => {
+    config.zoom = event.target.value;
+    saveConfig();
+});
+
 installBtn.addEventListener('click', function(event) {
     if (installBtn.disabled = false) return;
     installBtn.disabled = true;
@@ -137,6 +171,7 @@ cancelBtn.addEventListener('click', function(event) {
 
 ipc.on('install-selected', function (event, path) {
     disableAll();
+    resetProgress();
     install.install(path, config.folder, config.mods);
 });
 
@@ -153,6 +188,13 @@ var lastCompleted = 0;
 var lastTime = new Date();
 var rate = 0;
 var units = " B/s";
+
+function resetProgress() {
+    lastCompleted = 0;
+    lastTime = new Date();
+    rate = 0;
+}
+
 install.progress = function(completed, total) {
     var time = new Date();
     var elapsed = (time - lastTime) / 1000;
@@ -207,17 +249,20 @@ function modListChanged() {
     }
     saveConfig();
     disableAll();
+    resetProgress();
     install.install(config.folder, config.folder, config.mods);
 }
 
 fullscanBtn.addEventListener('click', function(event) {
     if (fullscanBtn.disabled) return;
     disableAll();
+    resetProgress();
     install.install(config.folder, config.folder, config.mods, true);
 });
 
-if (fs.existsSync(path.join(config.folder, 'infinity_00.tre'))) {
+if (fs.existsSync(path.join(config.folder, 'bottom.tre'))) {
     disableAll();
+    resetProgress();
     install.install(config.folder, config.folder, config.mods);
 } else {
     playBtn.disabled = true;
