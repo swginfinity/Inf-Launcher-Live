@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const request = require('request');
+const server = require('./server');
 
 module.exports.getManifest = function(mods, fullScan, emuPath, checkFiles) {
     if (!mods) mods = [];
@@ -13,7 +14,7 @@ module.exports.getManifest = function(mods, fullScan, emuPath, checkFiles) {
             {name:"swgemu_preload.cfg", size:0, md5:"", url:"http://www.swginfinity.com/updates/live/swgemu_preload.cfg"}
         ]);
     }
-    request({url:"http://www.swginfinity.com/updates/live/manifest.json", json:true}, function(err, response, body) {
+    request({url:server.manifestUrl, json:true}, function(err, response, body) {
         if (err) return console.error(err);
 
         var allmods = [];

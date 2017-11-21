@@ -1,1 +1,5 @@
-{"address": "live.swginfinity.com", "port": "44453"}
+{
+    "address": "live.swginfinity.com",
+    "port": "44453",
+    "manifestUrl": "http://www.swginfinity.com/updates/live/manifest.json"
+}
