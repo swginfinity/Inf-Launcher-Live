@@ -9,9 +9,9 @@ module.exports.getManifest = function(mods, fullScan, emuPath, checkFiles) {
     if (fullScan || emuPath && !fs.existsSync(path.join(emuPath, "swgemu.cfg"))) {
         //force download with size:0, md5:""
         files = files.concat([
-            {name:"swgemu.cfg", size:0, md5:"", url:"http://www.swginfinity.com/updates/live/swgemu.cfg"},
-            {name:"swgemu_machineoptions.iff", size:0, md5:"", url:"http://www.swginfinity.com/updates/live/swgemu_machineoptions.iff"},
-            {name:"swgemu_preload.cfg", size:0, md5:"", url:"http://www.swginfinity.com/updates/live/swgemu_preload.cfg"}
+            {name:"swgemu.cfg", size:0, md5:"", url:"https://www.dropbox.com/s/xd5aqsyng6pheto/swgemu.cfg?dl=1"},
+            {name:"swgemu_machineoptions.iff", size:0, md5:"", url:"https://www.dropbox.com/s/8bv7tna4kwi85fe/swgemu_machineoptions.iff?dl=1"},
+            {name:"swgemu_preload.cfg", size:0, md5:"", url:"https://www.dropbox.com/s/6xhfjws4qs63pgu/swgemu_preload.cfg?dl=1"}
         ]);
     }
     request({url:server.manifestUrl, json:true}, function(err, response, body) {
@@ -168,7 +168,7 @@ if (process.send) {
     }
 
     function md5(file, complete, progress) {
-        var hash = require('crypto').createHash('md5'); 
+        var hash = require('crypto').createHash('md5');
         var stream = fs.createReadStream(file);
         stream.on('data', data => {progress(data.length); hash.update(data, 'utf8')});
         stream.on('end', () => complete(hash.digest('hex')));
