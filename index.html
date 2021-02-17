@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
     <title>Infinity Launcher</title>
     <style>
       .button {
@@ -97,43 +97,46 @@
       #settings { background:url(./img/settingsbutton.png) no-repeat; }
       #settings:hover { background:url(./img/settingsbuttonhov.png) no-repeat; }
       #settings:active, #settings.active { background:url(./img/settingsbuttonclick.png) no-repeat; }
-      #settings:disabled { background:url(./img/settingsbuttondis.png) no-repeat; }
 
       #web { background:url(./img/webbutton.png) no-repeat; }
       #web:hover { background:url(./img/webbuttonhov.png) no-repeat; }
       #web:active { background:url(./img/webbuttonclick.png) no-repeat; }
-      #web:disabled { background:url(./img/webbuttondis.png) no-repeat; }
 
       #disc { background:url(./img/discbutton.png) no-repeat; }
       #disc:hover { background:url(./img/discbuttonhov.png) no-repeat; }
       #disc:active { background:url(./img/discbuttonclick.png) no-repeat; }
-      #disc:disabled { background:url(./img/discbuttondis.png) no-repeat; }
+ 
+      #donate { background:url(./img/donatebutton.png) no-repeat; }
+      #donate:hover { background:url(./img/donatebuttonhov.png) no-repeat; }
+      #donate:active { background:url(./img/donatebuttonclick.png) no-repeat; }
+
+      #skillcalc { background:url(./img/skillcalcbutton.png) no-repeat; }
+      #skillcalc:hover { background:url(./img/skillcalcbuttonhov.png) no-repeat; }
+      #skillcalc:active { background:url(./img/skillcalcbuttonclick.png) no-repeat; }
 
       #home { background:url(./img/homebutton.png) no-repeat; }
       #home:hover { background:url(./img/homebuttonhov.png) no-repeat; }
       #home:active { background:url(./img/homebuttonclick.png) no-repeat; }
 
       #minimize { background:url(./img/minimize.png) no-repeat; }
-      #maximize { background:url(./img/maximize.png) no-repeat; }
       #close { background:url(./img/close.png) no-repeat; }
 
       .webview-wrapper {border-radius: 5px; padding: 5px 0; background-color: white; box-sizing:border-box}
     </style>
   </head>
   <body style="overflow:hidden; height: 100%;user-select: none">
-    <img class="header-img" src="./img/launcher-background1.png" style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: -1;"/>
-    <div style="position: absolute; top:5px; right: 5px; z-index: 1000">
+     <img class="header-img" src="./img/launcher-background1.png" style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: -1;"/>
+     <div style="position: absolute; top:5px; right: 5px; z-index: 1000">
       <button id="minimize" class="traybutton"></button>
-      <button id="maximize" class="traybutton"></button>
-      <button id="close" class="traybutton"></button>
+       <button id="close" class="traybutton"></button>
     </div>
     <div id="rightcontent" class="rightbox">
          <div class="webview-wrapper right shadow" style="top:160px; height: calc(80% - 100px);">
-        <webview id="news" style="width:100%;height:100%" src="http://swginfinity.com/blog/"></webview>
+        <webview id="news" style="width:100%;height:100%" src="https://swginfinity.com/blog/#content"></webview>
       </div>
     </div>
     <div id="rightsettings" class="rightbox" style="display:none">
-      <div class="right" style="top: 24%;"><strong>Infinity Folder</strong></div>
+      <div class="right" style="top: 22.5%;"><strong><font size="+2">Infinity Folder</font></strong></div>
       <input id="folder" type="text" class="right shadow input" style="top: 28%"/>
       <button id="browse" class="right shadow" style="top: 34%">Browse</button>
       <button id="install" class="right shadow" style="top: 40%; width:38%;">Install From SWG</button>
@@ -172,9 +175,14 @@
       <div id="progress" style="width:0%;height:100%;background-color:#009900;border-radius:6px"></div>
       <div id="progresstext" style="position:absolute;top:0;width:100%;height:100%;text-align:center; color:#FFFFFF"></div>
     </div>
+
+    <img id="newsheader" class="header-img" src="./img/newsheader.png" style="position: absolute; top: 14%; left: 33%; width: 600px; -webkit-app-region: drag"/>
     <button id="settings" class="button" style="top: 48%; left: 0%"></button>
-    <button id="web" class="button" style="top: 68%; left: 0%;"></button>
-    <button id="disc" class="button" style="top: 79%; left: 0%;"></button>
+    <button id="disc" class="button" style="top: 58%; left: 0%;"></button>
+    <button id="donate" class="button" style="top:68%; left: 0%;"></button>
+    <button id="skillcalc" class="button" style="top: 78%; left: 0%"></button>
+    <button id="web" class="button" style="top: 88%; left: 0%;"></button>
+
     <div id="version"></div>
   </body>
 

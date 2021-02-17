@@ -6,12 +6,19 @@ const server = require('./server');
 module.exports.getManifest = function(mods, fullScan, emuPath, checkFiles) {
     if (!mods) mods = [];
     var files = require('./required');
-    if (fullScan || emuPath && !fs.existsSync(path.join(emuPath, "swgemu.cfg"))) {
+    if (fullScan || (emuPath && !fs.existsSync(path.join(emuPath, "swgemu.cfg")))) {
         //force download with size:0, md5:""
         files = files.concat([
-            {name:"swgemu.cfg", size:0, md5:"", url:"https://www.dropbox.com/s/xd5aqsyng6pheto/swgemu.cfg?dl=1"},
-            {name:"swgemu_machineoptions.iff", size:0, md5:"", url:"https://www.dropbox.com/s/8bv7tna4kwi85fe/swgemu_machineoptions.iff?dl=1"},
-            {name:"swgemu_preload.cfg", size:0, md5:"", url:"https://www.dropbox.com/s/6xhfjws4qs63pgu/swgemu_preload.cfg?dl=1"}
+	//Server specific files
+            {name:"swgemu_live.cfg", size:0, md5:"", url:"https://www.swginfinity.com/updates/live/swgemu_live.cfg"},
+
+	//Files for Initial Install and Full Recan (Both Live and TC)
+            {name:"swgemu.cfg", size:0, md5:"", url:"https://www.swginfinity.com/updates/fullscan/swgemu.cfg"},
+            {name:"swgemu_machineoptions.iff", size:0, md5:"", url:"https://www.swginfinity.com/updates/fullscan/swgemu_machineoptions.iff"},
+            {name:"swgemu_preload.cfg", size:0, md5:"", url:"https://www.swginfinity.com/updates/fullscan/swgemu_preload.cfg"},
+            {name:"user_infinity.cfg", size:0, md5:"", url:"https://www.swginfinity.com/updates/fullscan/user_infinity.cfg"},
+	    {name:"KSWGProfCalc.dat", size:0, md5:0, url:"http://www.swginfinity.com/updates/fullscan/KSWGProfCalc.dat"}, 
+	    {name:"KSWGProfCalcEditor.exe", size:0, md5:0, url:"http://www.swginfinity.com/updates/fullscan/KSWGProfCalcEditor.exe"}
         ]);
     }
     request({url:server.manifestUrl, json:true}, function(err, response, body) {

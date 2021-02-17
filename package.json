@@ -1,11 +1,12 @@
 {
   "name": "infinity-launcher",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "SWG Infinity Launcher",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "build --win --ia32 -p always"
+    "build": "build --win --ia32 -p never",
+    "deploy": "build --win --ia32 -p always"
   },
   "repository": "https://github.com/swginfinity/Inf-Launcher-Live",
   "homepage": "https://www.swginfinity.com",
@@ -21,25 +22,28 @@
     "emu",
     "swgemu"
   ],
-  "author": "Progor adapted by Qrave",
+  "author": "SWG Infinity Developers",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "~1.6.2",
-    "electron-builder": "^19.56.2"
+    "electron": "^11.2.3",
+    "electron-builder": "^20.44.4"
   },
   "dependencies": {
-    "adm-zip": "^0.4.16",
+    "adm-zip": "^0.5.2",
     "electron-is-dev": "^0.2.0",
-    "electron-log": "^2.2.7",
-    "electron-updater": "^2.18.2",
-    "follow-redirects": "^1.2.4",
-    "random-access-file": "^1.8.1",
-    "request": "^2.81.0",
-    "windows-elevate": "^1.0.1"
+    "electron-log": "^4.3.1",
+    "electron-updater": "^4.3.5",
+    "follow-redirects": "^1.13.2",
+    "mkdirp": "^1.0.4",
+    "node": "^15.8.0",
+    "npm": "^7.5.4",
+    "random-access-file": "^2.1.5",
+    "request": "^2.88.2"
   },
   "build": {
     "productName": "Infinity Launcher",
     "win": {
+      "requestedExecutionLevel": "highestAvailable",
       "target": [
         "nsis",
         "zip"
